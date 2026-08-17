@@ -1,23 +1,31 @@
+"use client";
+
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+
 export default function Plans() {
   return (
-    <section id="planos" className="bg-white">
-
-      <div className="min-h-screen flex items-center justify-center px-8 py-16">
-        <img
-          src="/planos/planta-alta.jpg"
-          alt="Planta Alta"
-          className="max-w-full max-h-[90vh] object-contain"
-        />
-      </div>
-
-      <div className="min-h-screen flex items-center justify-center px-8 py-16">
-        <img
-          src="/planos/planta-baja.jpg"
-          alt="Planta Baja"
-          className="max-w-full max-h-[90vh] object-contain"
-        />
-      </div>
-
+    <section id="planos" className="h-screen w-full bg-white overflow-hidden">
+      <TransformWrapper
+        initialScale={1}
+        minScale={1}
+        maxScale={4}
+        centerOnInit
+        wheel={{ disabled: true }}
+        doubleClick={{ disabled: true }}
+        panning={{ velocityDisabled: true }}
+      >
+        <TransformComponent
+          wrapperClass="!h-full !w-full"
+          contentClass="!h-full !w-full"
+        >
+          <img
+            src="/planos/plano.jpg"
+            alt="Plano Ombues Housing"
+            className="h-screen w-screen object-cover"
+            draggable={false}
+          />
+        </TransformComponent>
+      </TransformWrapper>
     </section>
   );
 }

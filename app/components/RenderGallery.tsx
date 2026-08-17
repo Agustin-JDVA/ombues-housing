@@ -15,6 +15,7 @@ const renders = [
   "render-06.jpg",
   "render-07.jpg",
   "render-08.jpg",
+  "render-09.jpg",
 ];
 
 export default function RenderGallery() {
