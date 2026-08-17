@@ -16,7 +16,10 @@ function CountUp({
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active) {
+      setValue(0);
+      return;
+    }
 
     let startTime: number | null = null;
     let animationFrame: number;
@@ -25,8 +28,6 @@ function CountUp({
       if (startTime === null) startTime = time;
 
       const progress = Math.min((time - startTime) / duration, 1);
-
-      // Movimiento suave al llegar al número final
       const eased = 1 - Math.pow(1 - progress, 3);
 
       setValue(Math.round(end * eased));
@@ -60,10 +61,7 @@ export default function ProjectInfo() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setAnimateNumbers(true);
-          observer.disconnect();
-        }
+        setAnimateNumbers(entry.isIntersecting);
       },
       {
         threshold: 0.25,
@@ -125,7 +123,7 @@ export default function ProjectInfo() {
 
         </div>
 
-        {/* SUPERFICIES */}
+        {/* SUPERFICIES Y TIPOLOGÍAS */}
         <div className="grid gap-16 md:grid-cols-2">
 
           <div>
@@ -199,7 +197,6 @@ export default function ProjectInfo() {
             </div>
           </div>
 
-          {/* TIPOLOGÍAS */}
           <div>
             <h3 className="mb-8 text-sm uppercase tracking-[0.3em] text-gray-500">
               Tipologías
