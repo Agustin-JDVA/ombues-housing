@@ -1,10 +1,16 @@
 "use client";
 
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import {
+  TransformWrapper,
+  TransformComponent,
+} from "react-zoom-pan-pinch";
 
 export default function Plans() {
   return (
-    <section id="planos" className="h-screen w-full bg-white overflow-hidden">
+    <section
+      id="planos"
+      className="h-screen w-full overflow-hidden bg-white"
+    >
       <TransformWrapper
         initialScale={1}
         minScale={1}
@@ -12,7 +18,16 @@ export default function Plans() {
         centerOnInit
         wheel={{ disabled: true }}
         doubleClick={{ disabled: true }}
-        panning={{ velocityDisabled: true }}
+
+        // Un dedo NO mueve el plano
+        panning={{
+          disabled: true,
+        }}
+
+        // Dos dedos SÍ permiten hacer zoom
+        pinch={{
+          disabled: false,
+        }}
       >
         <TransformComponent
           wrapperClass="!h-full !w-full"
