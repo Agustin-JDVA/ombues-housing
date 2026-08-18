@@ -77,7 +77,7 @@ export default function ProjectInfo() {
     <section
       ref={sectionRef}
       id="info"
-      className="min-h-screen bg-white flex items-center justify-center px-6 py-20 portrait:px-10 sm:portrait:px-14 md:portrait:px-16 md:px-12"
+      className="project-info-section min-h-screen bg-white flex items-center justify-center py-20"
     >
       <div className="w-full max-w-6xl">
 
@@ -299,6 +299,27 @@ export default function ProjectInfo() {
 
         </div>
       </div>
+
+      <style jsx global>{`
+        .project-info-section {
+          padding-left: 48px;
+          padding-right: 48px;
+        }
+
+        @media (orientation: portrait) {
+          .project-info-section {
+            padding-left: clamp(36px, 10vw, 96px);
+            padding-right: clamp(36px, 10vw, 96px);
+          }
+        }
+
+        @media (orientation: landscape) {
+          .project-info-section {
+            padding-left: 48px;
+            padding-right: 48px;
+          }
+        }
+      `}</style>
     </section>
   );
 }

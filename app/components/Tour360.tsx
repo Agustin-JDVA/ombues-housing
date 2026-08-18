@@ -24,6 +24,20 @@ export default function Tour360() {
     };
   }, []);
 
+  // Bloquea el scroll de la web mientras se explora el 360
+  // en tablet o celular.
+  useEffect(() => {
+    if (!isTouchDevice || !isExploring) return;
+
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isTouchDevice, isExploring]);
+
   const iframeInteractive = !isTouchDevice || isExploring;
 
   const buttonStyle = `
@@ -46,9 +60,12 @@ export default function Tour360() {
   `;
 
   return (
-    <section id="tours" className="relative h-screen w-full bg-black">
+    <section
+      id="tours"
+      className="relative h-screen w-full bg-black"
+    >
       <iframe
-        src="https://kuula.co/share/collection/7TwZL?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1"
+        src="https://kuula.co/share/collection/7TwZL?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1&zoom=1"
         className={`h-full w-full border-0 ${
           iframeInteractive
             ? "pointer-events-auto"
@@ -71,16 +88,22 @@ export default function Tour360() {
         </div>
       )}
 
-      {/* BOTÓN PARA SALIR */}
+      {/* BOTÓN PARA SALIR - SIEMPRE FIJO EN PANTALLA */}
       {isTouchDevice && isExploring && (
-        <div className="pointer-events-none absolute inset-0 z-[9999]">
-          <button
-            onClick={() => setIsExploring(false)}
-            className={`pointer-events-auto absolute left-1/2 top-6 -translate-x-1/2 ${buttonStyle}`}
-          >
-            Salir del 360°
-          </button>
-        </div>
+        <button
+          onClick={() => setIsExploring(false)}
+          className={`
+            pointer-events-auto
+            fixed
+            left-1/2
+            top-[calc(env(safe-area-inset-top)+24px)]
+            z-[999999]
+            -translate-x-1/2
+            ${buttonStyle}
+          `}
+        >
+          Salir del 360°
+        </button>
       )}
     </section>
   );
