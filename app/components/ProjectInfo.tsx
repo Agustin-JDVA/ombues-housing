@@ -77,7 +77,7 @@ export default function ProjectInfo() {
     <section
       ref={sectionRef}
       id="info"
-      className="min-h-screen bg-white flex items-center justify-center px-6 py-20 md:px-12"
+      className="min-h-screen bg-white flex items-center justify-center px-6 py-20 portrait:px-10 sm:portrait:px-14 md:portrait:px-16 md:px-12"
     >
       <div className="w-full max-w-6xl">
 
