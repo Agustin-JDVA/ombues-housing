@@ -3,31 +3,12 @@
 import { useEffect, useState } from "react";
 
 export default function Tour360() {
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isExploring, setIsExploring] = useState(false);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      "(hover: none) and (pointer: coarse)"
-    );
-
-    setIsTouchDevice(mediaQuery.matches);
-
-    const handleChange = (event: MediaQueryListEvent) => {
-      setIsTouchDevice(event.matches);
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleChange);
-    };
-  }, []);
-
   // Bloquea el scroll de la web mientras se explora el 360
-  // en tablet o celular.
+  // tanto en PC como en tablet y celular.
   useEffect(() => {
-    if (!isTouchDevice || !isExploring) return;
+    if (!isExploring) return;
 
     const previousOverflow = document.body.style.overflow;
 
@@ -36,9 +17,7 @@ export default function Tour360() {
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [isTouchDevice, isExploring]);
-
-  const iframeInteractive = !isTouchDevice || isExploring;
+  }, [isExploring]);
 
   const buttonStyle = `
     flex
@@ -67,7 +46,7 @@ export default function Tour360() {
       <iframe
         src="https://kuula.co/share/collection/7TwZL?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1&zoom=1"
         className={`h-full w-full border-0 ${
-          iframeInteractive
+          isExploring
             ? "pointer-events-auto"
             : "pointer-events-none"
         }`}
@@ -77,7 +56,7 @@ export default function Tour360() {
       />
 
       {/* BOTÓN PARA ENTRAR */}
-      {isTouchDevice && !isExploring && (
+      {!isExploring && (
         <div className="pointer-events-none absolute inset-0 z-[9999] flex items-center justify-center">
           <button
             onClick={() => setIsExploring(true)}
@@ -89,7 +68,7 @@ export default function Tour360() {
       )}
 
       {/* BOTÓN PARA SALIR - SIEMPRE FIJO EN PANTALLA */}
-      {isTouchDevice && isExploring && (
+      {isExploring && (
         <button
           onClick={() => setIsExploring(false)}
           className={`
