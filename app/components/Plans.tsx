@@ -149,13 +149,10 @@ const Plans = () => {
   }, [isExploring]);
 
   /*
-    LÍMITES MANUALES PARA PC
+    LÍMITES MANUALES EN PC
 
-    El plano puede moverse bastante,
-    pero nunca puede desaparecer completamente.
-
-    0.75 = puede desplazarse hasta el 75%
-    del ancho/alto de la pantalla.
+    Puede moverse con libertad,
+    pero no puede perderse fuera de pantalla.
   */
   const desktopLimitX =
     viewport.width * 0.75;
@@ -183,17 +180,16 @@ const Plans = () => {
         centerOnInit={true}
 
         /*
-          PC:
-          usamos nuestros propios límites.
-
           TOUCH:
-          mantiene los límites automáticos.
+          límites automáticos.
+
+          PC:
+          usamos nuestros límites manuales.
         */
         limitToBounds={!isDesktop}
 
         /*
-          LÍMITES FINITOS EN PC.
-          No puede desaparecer fuera de pantalla.
+          LÍMITES FINITOS SOLO EN PC.
         */
         minPositionX={
           isDesktop
@@ -217,23 +213,17 @@ const Plans = () => {
         }
 
         /*
-          NO RECENTRAR AUTOMÁTICAMENTE.
+          NO CENTRAR AUTOMÁTICAMENTE.
         */
         centerZoomedOut={false}
 
         /*
-          SIN AUTO-ALINEADO EN PC.
+          EN PC:
+          desactivamos el auto-alineado.
+          Al soltar el mouse queda exactamente
+          donde lo dejaste.
         */
         autoAlignment={{
-          disabled: isDesktop,
-          sizeX: 0,
-          sizeY: 0,
-        }}
-
-        /*
-          SIN ANIMACIÓN DE CORRECCIÓN EN PC.
-        */
-        alignmentAnimation={{
           disabled: isDesktop,
           sizeX: 0,
           sizeY: 0,
@@ -242,8 +232,6 @@ const Plans = () => {
 
         /*
           SIN INERCIA.
-          Cuando soltamos el mouse,
-          queda exactamente en esa posición.
         */
         velocityAnimation={{
           disabled: true,
@@ -260,7 +248,8 @@ const Plans = () => {
 
         /*
           DOBLE CLICK:
-          ÚNICA FORMA DE RECENTRAR EN PC.
+          ÚNICA FORMA AUTOMÁTICA DE
+          VOLVER AL CENTRO EN PC.
         */
         doubleClick={{
           disabled: !isDesktop || !isExploring,
@@ -270,7 +259,7 @@ const Plans = () => {
 
         /*
           PC:
-          arrastrar con mouse.
+          movimiento con mouse.
 
           TOUCH:
           un dedo no mueve el plano.
@@ -284,7 +273,7 @@ const Plans = () => {
 
         /*
           TABLET / CELULAR:
-          dos dedos para zoom y movimiento.
+          dos dedos para zoom.
         */
         pinch={{
           disabled: !isExploring,
@@ -336,7 +325,6 @@ const Plans = () => {
           justify-content: center;
         }
 
-        /* CURSOR PC */
         .plan-wrapper.plan-exploring {
           cursor: grab !important;
         }
@@ -345,7 +333,6 @@ const Plans = () => {
           cursor: grabbing !important;
         }
 
-        /* PANTALLA HORIZONTAL */
         @media (orientation: landscape) {
           .plan-content {
             width: 100vw !important;
@@ -362,7 +349,6 @@ const Plans = () => {
           }
         }
 
-        /* PANTALLA VERTICAL */
         @media (orientation: portrait) {
           .plan-content {
             width: max-content !important;
