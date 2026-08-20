@@ -60,6 +60,89 @@ const PlanControls = ({
   );
 };
 
+const PlanImage = ({
+  isExploring,
+  planWrapperClass,
+}: {
+  isExploring: boolean;
+  planWrapperClass: string;
+}) => {
+  const { resetTransform } = useControls();
+
+  useEffect(() => {
+    if (isExploring) return;
+
+    const section = document.getElementById("planos");
+
+    if (!section) return;
+
+    const centerPlan = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resetTransform(0);
+        });
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (
+          entry.isIntersecting &&
+          entry.intersectionRatio >= 0.25 &&
+          !isExploring
+        ) {
+          centerPlan();
+        }
+      },
+      {
+        threshold: [0.25, 0.5, 0.75],
+      }
+    );
+
+    observer.observe(section);
+
+    const handleResize = () => {
+      if (!isExploring) {
+        centerPlan();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isExploring, resetTransform]);
+
+  const handleImageLoad = () => {
+    if (isExploring) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        resetTransform(0);
+      });
+    });
+  };
+
+  return (
+    <TransformComponent
+      wrapperClass={planWrapperClass}
+      contentClass="plan-content"
+    >
+      <img
+        src="/planos/plano.jpg"
+        alt="Plano Ombues Housing"
+        className="plan-image"
+        draggable={false}
+        onLoad={handleImageLoad}
+      />
+    </TransformComponent>
+  );
+};
+
 const Plans = () => {
   const [isPortrait, setIsPortrait] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -224,17 +307,10 @@ const Plans = () => {
           onExit={() => setIsExploring(false)}
         />
 
-        <TransformComponent
-          wrapperClass={planWrapperClass}
-          contentClass="plan-content"
-        >
-          <img
-            src="/planos/plano.jpg"
-            alt="Plano Ombues Housing"
-            className="plan-image"
-            draggable={false}
-          />
-        </TransformComponent>
+        <PlanImage
+          isExploring={isExploring}
+          planWrapperClass={planWrapperClass}
+        />
       </TransformWrapper>
 
       {!isExploring && (
