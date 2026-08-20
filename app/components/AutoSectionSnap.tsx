@@ -114,7 +114,9 @@ export default function AutoSectionSnap() {
       const targetY =
         window.scrollY + rect.top;
 
-      if (Math.abs(targetY - window.scrollY) < 3) {
+      if (
+        Math.abs(targetY - window.scrollY) < 3
+      ) {
         return;
       }
 
@@ -128,10 +130,10 @@ export default function AutoSectionSnap() {
         clearTimeout(timeoutRef.current);
       }
 
-      // Espera 1 segundo después de dejar de scrollear
+      // Espera solo 400 ms después de dejar de scrollear
       timeoutRef.current = setTimeout(() => {
         snapToNearestSection();
-      }, 1000);
+      }, 400);
     };
 
     const handleUserInteraction = () => {
