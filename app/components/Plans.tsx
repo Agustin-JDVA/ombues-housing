@@ -27,7 +27,6 @@ const PlanControls = ({
 
   return (
     <>
-      {/* BOTONES + / - SOLO EN PC */}
       {isDesktop && (
         <div className="pointer-events-auto absolute right-5 top-1/2 z-[9998] flex -translate-y-1/2 flex-col gap-2">
           <button
@@ -50,7 +49,6 @@ const PlanControls = ({
         </div>
       )}
 
-      {/* BOTÓN SALIR */}
       <button
         type="button"
         onClick={handleExit}
@@ -148,22 +146,15 @@ const Plans = () => {
     };
   }, [isExploring]);
 
-  /*
-    LÍMITES MANUALES EN PC
-
-    Puede moverse con libertad,
-    pero no puede perderse fuera de pantalla.
-  */
   const desktopLimitX =
     viewport.width * 0.75;
 
   const desktopLimitY =
     viewport.height * 0.75;
 
-  const planWrapperClass =
-    isDesktop && isExploring
-      ? "plan-wrapper plan-exploring"
-      : "plan-wrapper";
+  const planWrapperClass = isExploring
+    ? "plan-wrapper plan-exploring"
+    : "plan-wrapper";
 
   return (
     <section
@@ -178,19 +169,7 @@ const Plans = () => {
         minScale={1}
         maxScale={4}
         centerOnInit={true}
-
-        /*
-          TOUCH:
-          límites automáticos.
-
-          PC:
-          usamos nuestros límites manuales.
-        */
         limitToBounds={!isDesktop}
-
-        /*
-          LÍMITES FINITOS SOLO EN PC.
-        */
         minPositionX={
           isDesktop
             ? -desktopLimitX
@@ -211,70 +190,29 @@ const Plans = () => {
             ? desktopLimitY
             : undefined
         }
-
-        /*
-          NO CENTRAR AUTOMÁTICAMENTE.
-        */
         centerZoomedOut={false}
-
-        /*
-          EN PC:
-          desactivamos el auto-alineado.
-          Al soltar el mouse queda exactamente
-          donde lo dejaste.
-        */
         autoAlignment={{
           disabled: isDesktop,
           sizeX: 0,
           sizeY: 0,
           animationTime: 0,
         }}
-
-        /*
-          SIN INERCIA.
-        */
         velocityAnimation={{
           disabled: true,
         }}
-
-        /*
-          RUEDA:
-          zoom solo en PC mientras exploramos.
-        */
         wheel={{
           disabled: !isDesktop || !isExploring,
           step: 0.15,
         }}
-
-        /*
-          DOBLE CLICK:
-          ÚNICA FORMA AUTOMÁTICA DE
-          VOLVER AL CENTRO EN PC.
-        */
         doubleClick={{
           disabled: !isDesktop || !isExploring,
           mode: "reset",
           animationTime: 400,
         }}
-
-        /*
-          PC:
-          movimiento con mouse.
-
-          TOUCH:
-          un dedo no mueve el plano.
-        */
         panning={{
-          disabled: isDesktop
-            ? !isExploring
-            : true,
+          disabled: !isExploring,
           velocityDisabled: true,
         }}
-
-        /*
-          TABLET / CELULAR:
-          dos dedos para zoom.
-        */
         pinch={{
           disabled: !isExploring,
           allowPanning: true,
@@ -299,7 +237,6 @@ const Plans = () => {
         </TransformComponent>
       </TransformWrapper>
 
-      {/* BOTÓN EXPLORAR */}
       {!isExploring && (
         <div className="pointer-events-none absolute inset-0 z-[9997] flex items-center justify-center">
           <button
@@ -317,20 +254,22 @@ const Plans = () => {
           width: 100% !important;
           height: 100% !important;
           overflow: hidden !important;
+          touch-action: pan-y;
+        }
+
+        .plan-wrapper.plan-exploring {
+          cursor: grab !important;
+          touch-action: none !important;
+        }
+
+        .plan-wrapper.plan-exploring:active {
+          cursor: grabbing !important;
         }
 
         .plan-content {
           display: flex !important;
           align-items: center;
           justify-content: center;
-        }
-
-        .plan-wrapper.plan-exploring {
-          cursor: grab !important;
-        }
-
-        .plan-wrapper.plan-exploring:active {
-          cursor: grabbing !important;
         }
 
         @media (orientation: landscape) {
